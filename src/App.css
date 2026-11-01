@@ -5,14 +5,10 @@
   padding: 25px;
 }
 
-.image-container {
-  background-color: yellow;
-}
-
 img {
   height: 190px;
   width: 190px;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .progress-bar {
