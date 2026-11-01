@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css'
 
 function App() {
-  const [ isPlaying, setIsPlaying ] = useState(false);
-  const [ currentIndex, setCurrentIndex ] = useState(2);
-  const [ songs, setSongs ] = useState([{
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(2);
+  const [songs, setSongs] = useState([{
     name: 'To Deep for the Intro',
     artist: 'J. Cole',
     audio: 'songs/Too Deep for the Intro(MP3_160K).mp3',
@@ -12,7 +12,7 @@ function App() {
     id: '1'
   }, {
     name: 'The Cut Off',
-    artist: 'J. Cole', 
+    artist: 'J. Cole',
     audio: 'songs/The Cut Off(MP3_160K) (1).mp3',
     img: 'images/image-2.jpeg',
     id: '2'
@@ -24,33 +24,9 @@ function App() {
     id: '3'
   }]);
 
+
+
   const currentSong = songs[currentIndex];
-
-  function handlePreviousBtn() {
-    setIsPlaying(false);
-
-    if (currentIndex === 0) {
-      return setCurrentIndex(songs.length - 1);
-    };
-
-    setCurrentIndex(count => count -= 1);
-  }
-
-  function handleNextBtn() {
-
-
-
-    setIsPlaying(true);
-    
-    if (currentIndex === songs.length - 1) {
-      return setCurrentIndex(0);
-    };
-
-    setCurrentIndex(count => count += 1);
-
-    document.getElementById('song').play();d
-  }
-  
 
   function handlePlayBtn() {
     const song = document.getElementById('song');
@@ -59,23 +35,41 @@ function App() {
       song.play();
       setIsPlaying(true);
 
-    } else { 
+    } else {
       song.pause();
       setIsPlaying(false);
     }
   }
-  
-  
+
+  function handlePreviousBtn() {
+    if (currentIndex === 0) {
+      return setCurrentIndex(songs.length - 1);
+    };
+
+    setCurrentIndex(count => count -= 1);
+    setIsPlaying(false);
+    
+  }
+
+  function handleNextBtn() {
+    if (currentIndex === songs.length - 1) {
+      return setCurrentIndex(0);
+
+    };
+
+    setCurrentIndex(count => count += 1);
+    setIsPlaying(false);
+  }
 
   return (
     <>
       <div className="app-container">
-          <img src={currentSong.img} alt="album-art" />
+        <img src={currentSong.img} alt="album-art" />
         <div className="info-container">
           <h3 className="song-name">{currentSong.name}</h3>
           <p className="artist-name">{currentSong.artist}</p>
         </div>
-          <input className='progress-bar' type="range" />
+        <input className='progress-bar' type="range" />
         <div className="controls-container">
           <button className="btn btn-previous" onClick={handlePreviousBtn}>⏪</button>
           <button className="btn btn-play" onClick={handlePlayBtn}>▶️</button>
@@ -88,3 +82,4 @@ function App() {
 }
 
 export default App
+
