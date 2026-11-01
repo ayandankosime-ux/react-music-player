@@ -1,25 +1,200 @@
-.app-container {
-  background-color: aqua;
-  border-radius: 20px;
-  box-shadow: 0px 0px 10px rgba( 0, 0, 0, 0.4);
-  padding: 25px;
+/* Reset and Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-img {
-  height: 190px;
-  width: 190px;
-  object-fit: contain;
-}
-
-.progress-bar {
-  width: 100%;
-}
-
-.controls-container {
+body {
+  min-height: 100vh;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at top left, #2c1a32, #121216 70%);
+  color: #ffffff;
 }
 
+/* App Container (Glassmorphism Player Card) */
+.app-container {
+  width: 360px;
+  padding: 28px;
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 28px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Album Art */
+.app-container img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 18px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.app-container img:hover {
+  transform: scale(1.02);
+}
+
+/* Song & Artist Info */
+.info-container {
+  width: 100%;
+  text-align: left;
+  margin-top: 4px;
+}
+
+.song-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.artist-name {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Progress Slider */
+.progress-bar {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.2);
+  outline: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.progress-bar::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.progress-bar:hover::-webkit-slider-thumb {
+  transform: scale(1.25);
+}
+
+.progress-bar::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+/* Controls Container */
+.controls-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-top: 8px;
+}
+
+/* Base Control Buttons */
 .btn {
-  border-radius: 50px;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: #ffffff;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.2s ease;
+}
+
+.btn:active {
+  transform: scale(0.9);
+}
+
+.btn-previous,
+.btn-next {
+  width: 44px;
+  height: 44px;
+  opacity: 0.85;
+}
+
+.btn-previous:hover,
+.btn-next:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Play/Pause Main Button */
+.btn-play {
+  width: 60px;
+  height: 60px;
+  font-size: 1.6rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.btn-play:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.06);
+}
+
+.btn-play:active {
+  transform: scale(0.94);
+}
+/* Inline SVG sizing inside control buttons */
+.btn svg {
+  width: 22px;
+  height: 22px;
+}
+
+.btn-play svg {
+  width: 28px;
+  height: 28px;
+}
+
+/* Progress Container & Time Stamps */
+.progress-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.time-stamps {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
 }
