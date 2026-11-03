@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './App.css'
 
 function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(2);
+  const [duration, setDuration] = useState(0);
   const [songs, setSongs] = useState([{
     name: 'To Deep for the Intro',
     artist: 'J. Cole',
@@ -24,29 +25,25 @@ function App() {
     id: '3'
   }]);
 
+  
+  const audioRef = useRef(null);
   const currentSong = songs[currentIndex];
 
+  console.log();
+
   useEffect(() => {
-    const song = document.getElementById('song');
-    if (isPlaying && song) {
-      song.play();
+    if (!audioRef.current) return;
+
+    if (isPlaying) {
+      audioRef.current.play();
+    } else {
+      audioRef.current.pause();
     }
 
-  }, [currentIndex])
+  }, [isPlaying, currentIndex]);
 
   function handlePlayBtn() {
-    const song = document.getElementById('song');
-
-    if (!isPlaying) {
-      song.play();
-      setIsPlaying(true);
-
-    } else {
-      song.pause();
-      setIsPlaying(false);
-    }
-
-    console.log(formatTime(currentSong.duration));
+    setIsPlaying(prev => !prev);
   }
 
   function handlePreviousBtn() {
@@ -69,7 +66,19 @@ function App() {
     setIsPlaying(true);
   }
 
-  
+  function handleLoadedMetadata() {
+    if (audioRef.current) {
+      setDuration(audioRef.current.duration);
+    }
+  }
+
+  function formatTime(seconds) {
+    if (isNaN(seconds) || seconds === 0) return;
+
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60 );
+    return ( `${mins}: ${secs < 10 ? '0' : ''}${secs}`);
+  }
 
   return (
     <>
@@ -87,10 +96,10 @@ function App() {
 
       {/* Progress Bar & Time Stamps */}
       <div className="progress-container">
-        <input className="progress-bar" type="range" defaultValue="0" />
+        <input className="progress-bar" id='progress-bar' type="range" min='0' max='100'/>
         <div className="time-stamps">
           <span>0:00</span>
-          <span>-3:45</span>
+          <span>{formatTime(duration)}</span>
         </div>
       </div>
 
@@ -139,7 +148,11 @@ function App() {
       </div>
 
       {/* Hidden Audio Element */}
-      <audio id="song" src={currentSong.audio}></audio>
+      <audio 
+        ref={audioRef} 
+        src={currentSong.audio} 
+        onLoadedMetadata={handleLoadedMetadata}
+      />
     </div>
     </>
   )
