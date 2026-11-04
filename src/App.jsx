@@ -5,6 +5,7 @@ function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(2);
   const [duration, setDuration] = useState(0);
+  const [playTime, setPlayTime] = useState('0:00');
   const [songs, setSongs] = useState([{
     name: 'To Deep for the Intro',
     artist: 'J. Cole',
@@ -72,6 +73,10 @@ function App() {
     }
   }
 
+  function handleTimeUpdate(event) {
+    setPlayTime(formatTime(audioRef.current.currentTime));
+  }
+
   function formatTime(seconds) {
     if (isNaN(seconds) || seconds === 0) return;
 
@@ -79,6 +84,7 @@ function App() {
     const secs = Math.floor(seconds % 60 );
     return ( `${mins}: ${secs < 10 ? '0' : ''}${secs}`);
   }
+
 
   return (
     <>
@@ -98,7 +104,7 @@ function App() {
       <div className="progress-container">
         <input className="progress-bar" id='progress-bar' type="range" min='0' max='100'/>
         <div className="time-stamps">
-          <span>0:00</span>
+          <span>{playTime}</span>
           <span>{formatTime(duration)}</span>
         </div>
       </div>
@@ -152,6 +158,7 @@ function App() {
         ref={audioRef} 
         src={currentSong.audio} 
         onLoadedMetadata={handleLoadedMetadata}
+        onTimeUpdate={handleTimeUpdate}
       />
     </div>
     </>
