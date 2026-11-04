@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
+import { songs } from './data/songs';
+import formatTime from './utils/formatTime';
 import './App.css'
 
 function App() {
@@ -6,31 +8,10 @@ function App() {
   const [currentIndex, setCurrentIndex] = useState(2);
   const [duration, setDuration] = useState(0);
   const [playTime, setPlayTime] = useState('0:00');
-  const [songs, setSongs] = useState([{
-    name: 'To Deep for the Intro',
-    artist: 'J. Cole',
-    audio: 'songs/Too Deep for the Intro(MP3_160K).mp3',
-    img: 'images/image-1.jpg',
-    id: '1'
-  }, {
-    name: 'The Cut Off',
-    artist: 'J. Cole',
-    audio: 'songs/The Cut Off(MP3_160K) (1).mp3',
-    img: 'images/image-2.jpeg',
-    id: '2'
-  }, {
-    name: 'TOO COOL',
-    artist: 'Dear Silas',
-    audio: 'songs/TOO COOL (Clean Version)(MP3_160K).mp3',
-    img: 'images/image-3.jpeg',
-    id: '3'
-  }]);
 
   
   const audioRef = useRef(null);
   const currentSong = songs[currentIndex];
-
-  console.log();
 
   useEffect(() => {
     if (!audioRef.current) return;
@@ -74,17 +55,17 @@ function App() {
   }
 
   function handleTimeUpdate(event) {
-    setPlayTime(formatTime(audioRef.current.currentTime));
+    setPlayTime(audioRef.current.currentTime);
   }
 
-  function formatTime(seconds) {
-    if (isNaN(seconds) || seconds === 0) return;
-
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60 );
-    return ( `${mins}: ${secs < 10 ? '0' : ''}${secs}`);
+  function handleProgressBarInput(event) {
+    const sliderInput = event.target.value;
+    audioRef.current.currentTime = sliderInput;
+    setPlayTime(String(sliderInput));
+    
   }
 
+  ;
 
   return (
     <>
@@ -102,9 +83,17 @@ function App() {
 
       {/* Progress Bar & Time Stamps */}
       <div className="progress-container">
-        <input className="progress-bar" id='progress-bar' type="range" min='0' max='100'/>
+        <input
+          className="progress-bar" 
+          id='progressBar' 
+          type="range"  
+          min='0' 
+          max={duration}
+          value={playTime}
+          onInput={handleProgressBarInput} 
+         />
         <div className="time-stamps">
-          <span>{playTime}</span>
+          <span>{!playTime ? '0: 00' : formatTime(playTime)}</span>
           <span>{formatTime(duration)}</span>
         </div>
       </div>
@@ -155,8 +144,8 @@ function App() {
 
       {/* Hidden Audio Element */}
       <audio 
-        ref={audioRef} 
-        src={currentSong.audio} 
+        ref={audioRef}
+        src={currentSong.audio}
         onLoadedMetadata={handleLoadedMetadata}
         onTimeUpdate={handleTimeUpdate}
       />
